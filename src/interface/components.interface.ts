@@ -2,6 +2,7 @@ export interface IEventsComponent {
   onFailed: () => void;
   onPickEvent: (id: number) => void;
   onFilter: string | null;
+  onSearch: string | null;
 }
 
 export interface IEventComponent {

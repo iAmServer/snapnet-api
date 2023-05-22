@@ -6,6 +6,7 @@ import Events from "./components/Events";
 function App() {
   const [eventId, setEventId] = useState<number | null>(null);
   const [pet, setPet] = useState<string | null>(null);
+  const [search, setSearch] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
 
   return (
@@ -40,10 +41,18 @@ function App() {
               </select>
             </div>
 
+            <input
+              className="w-full p-4 rounded-md mb-6 border"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="search"
+            />
+
             <Events
               onPickEvent={setEventId}
               onFailed={() => setError(true)}
               onFilter={pet}
+              onSearch={search}
             />
           </div>
           {eventId && (

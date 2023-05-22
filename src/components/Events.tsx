@@ -7,6 +7,7 @@ const Events: React.FC<IEventsComponent> = ({
   onFailed,
   onPickEvent,
   onFilter,
+  onSearch,
 }) => {
   const getEvents: QueryFunction<IEvent[] | undefined> = async () => {
     try {
@@ -33,28 +34,29 @@ const Events: React.FC<IEventsComponent> = ({
     return null;
   }
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <div className="flex flex-col justify-center items-center min-h-[200px]">
         <Spinner />
       </div>
     );
+  }
+
+  const filteredData = onFilter
+    ? data?.filter((event) => event.petsAllowed === (onFilter === "yes"))
+    : data;
+
+  const searchedData = onSearch
+    ? filteredData?.filter((event) =>
+        event.title.toLowerCase().includes(onSearch.toLowerCase())
+      )
+    : filteredData;
 
   return (
     <ul className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center">
-      {onFilter
-        ? data
-            ?.filter((event) => {
-              const filter = onFilter === "yes";
-
-              return event.petsAllowed === filter;
-            })
-            .map((event) => (
-              <List key={event.id} event={event} onPickEvent={onPickEvent} />
-            ))
-        : data?.map((event) => (
-            <List key={event.id} event={event} onPickEvent={onPickEvent} />
-          ))}
+      {searchedData?.map((event) => (
+        <List key={event.id} event={event} onPickEvent={onPickEvent} />
+      ))}
     </ul>
   );
 };
