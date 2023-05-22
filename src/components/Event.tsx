@@ -5,10 +5,12 @@ import { IEvent } from "../interface/event.interface";
 import Spinner from "./Spinner";
 
 const Event: React.FC<IEventComponent> = ({ id, onClose, onFailed }) => {
-  const getEvent: QueryFunction<IEvent | undefined> = async (queryKey) => {
+  const getEvent: QueryFunction<IEvent | undefined> = async (
+    query
+  ): Promise<IEvent | undefined> => {
     try {
       const res = await fetch(
-        `https://my-json-server.typicode.com/Code-Pop/Touring-Vue-Router/events/${queryKey.queryKey[1]}`
+        `https://my-json-server.typicode.com/Code-Pop/Touring-Vue-Router/events/${query.queryKey[1]}`
       );
 
       if (!res.ok) {
@@ -20,7 +22,10 @@ const Event: React.FC<IEventComponent> = ({ id, onClose, onFailed }) => {
       onFailed();
     }
   };
-  let { data, isLoading, error } = useQuery(["event", id], getEvent);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["event", id],
+    queryFn: getEvent,
+  });
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {

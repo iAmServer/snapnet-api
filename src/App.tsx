@@ -5,6 +5,7 @@ import Events from "./components/Events";
 
 function App() {
   const [eventId, setEventId] = useState<number | null>(null);
+  const [pet, setPet] = useState<string | null>(null);
   const [error, setError] = useState<boolean>(false);
 
   return (
@@ -20,11 +21,30 @@ function App() {
               !eventId && "col-span-2 lg:w-2/3 xl:w-1/2 place-self-center"
             }`}
           >
-            <p className="text-xs uppercase font-light text-gray-500 my-6">
-              Latest Events
-            </p>
+            <div className="flex justify-between items-center">
+              <p className="text-xs uppercase font-light text-gray-500 my-6">
+                Latest Events
+              </p>
 
-            <Events onPickEvent={setEventId} onFailed={() => setError(true)} />
+              <select
+                name="pet"
+                id="pet"
+                defaultValue={pet || ""}
+                onChange={(e) => {
+                  setPet(e.target.value);
+                }}
+              >
+                <option value="">Filter Pets</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+
+            <Events
+              onPickEvent={setEventId}
+              onFailed={() => setError(true)}
+              onFilter={pet}
+            />
           </div>
           {eventId && (
             <Event
