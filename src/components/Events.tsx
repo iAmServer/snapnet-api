@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { QueryFunction, useQuery } from "react-query";
 import { IEventsComponent } from "../interface/components.interface";
 import { IEvent } from "../interface/event.interface";
@@ -52,12 +53,44 @@ const Events: React.FC<IEventsComponent> = ({
       )
     : filteredData;
 
+  const ITEMS_PER_PAGE = 3;
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedData = searchedData?.slice(startIndex, endIndex);
+  const totalPages = Math.ceil((searchedData?.length || 0) / ITEMS_PER_PAGE);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
-    <ul className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center">
-      {searchedData?.map((event) => (
-        <List key={event.id} event={event} onPickEvent={onPickEvent} />
-      ))}
-    </ul>
+    <>
+      <ul className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center">
+        {paginatedData?.map((event) => (
+          <List key={event.id} event={event} onPickEvent={onPickEvent} />
+        ))}
+      </ul>
+
+      <div className="flex justify-center mt-6">
+        {totalPages > 1 &&
+          Array.from({ length: totalPages }, (_, index) => index + 1).map(
+            (page) => (
+              <button
+                key={page}
+                className={`${
+                  page === currentPage
+                    ? "bg-red-500 text-white"
+                    : "bg-gray-200 text-gray-600"
+                } mx-1 px-3 py-1 rounded-lg hover:bg-red-500 hover:text-white transition duration-300 ease-in-out`}
+                onClick={() => handlePageChange(page)}
+              >
+                {page}
+              </button>
+            )
+          )}
+      </div>
+    </>
   );
 };
 
