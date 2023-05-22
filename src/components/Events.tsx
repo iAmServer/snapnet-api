@@ -25,6 +25,7 @@ const Events: React.FC<IEventsComponent> = ({
       onFailed();
     }
   };
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const { data, isLoading, error } = useQuery({
     queryKey: ["events"],
     queryFn: getEvents,
@@ -53,11 +54,12 @@ const Events: React.FC<IEventsComponent> = ({
       )
     : filteredData;
 
-  const ITEMS_PER_PAGE = 3;
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const ITEMS_PER_PAGE = 3; // Number of items per page
+
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedData = searchedData?.slice(startIndex, endIndex);
+
   const totalPages = Math.ceil((searchedData?.length || 0) / ITEMS_PER_PAGE);
 
   const handlePageChange = (page: number) => {
@@ -80,9 +82,9 @@ const Events: React.FC<IEventsComponent> = ({
                 key={page}
                 className={`${
                   page === currentPage
-                    ? "bg-red-500 text-white"
+                    ? "bg-blue-500 text-white"
                     : "bg-gray-200 text-gray-600"
-                } mx-1 px-3 py-1 rounded-lg hover:bg-red-500 hover:text-white transition duration-300 ease-in-out`}
+                } mx-1 px-3 py-1 rounded-lg hover:bg-blue-500 hover:text-white transition duration-300 ease-in-out`}
                 onClick={() => handlePageChange(page)}
               >
                 {page}
