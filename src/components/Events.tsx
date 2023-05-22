@@ -82,9 +82,9 @@ const Events: React.FC<IEventsComponent> = ({
                 key={page}
                 className={`${
                   page === currentPage
-                    ? "bg-blue-500 text-white"
+                    ? "bg-red-500 text-white"
                     : "bg-gray-200 text-gray-600"
-                } mx-1 px-3 py-1 rounded-lg hover:bg-blue-500 hover:text-white transition duration-300 ease-in-out`}
+                } mx-1 px-3 py-1 rounded-lg hover:bg-red-500 hover:text-white transition duration-300 ease-in-out`}
                 onClick={() => handlePageChange(page)}
               >
                 {page}
